@@ -9,8 +9,8 @@ import os
 
 embedder_config = {
 	"provider": OpenAIEmbeddingFunction(
-		model_name="mxbai-embed-large",
-		api_base="http://localhost:11434/v1",
+		model_name=os.getenv("EMBEDDER_MODEL", "mxbai-embed-large"),
+		api_base=os.getenv("EMBEDDER_API_BASE", "http://localhost:11434/v1"),
 		api_key="secret",
 	)
 }
@@ -66,6 +66,7 @@ class PlotDevelopment():
 			verbose=True,
 			llm=llm,
 			function_calling_llm=function_calling_llm,
+			knowledge=knowledge,
 
 		)
 
@@ -76,6 +77,7 @@ class PlotDevelopment():
 			verbose=True,
 			llm=llm,
 			function_calling_llm=function_calling_llm,
+			knowledge=knowledge,
 		)
 	
 	@task
@@ -126,14 +128,14 @@ class PlotDevelopment():
 		return Crew(
 			agents=self.agents, # Automatically created by the @agent decorator
 			tasks=self.tasks, # Automatically created by the @task decorator
-			process=Process.hierarchical,
+			process=Process.sequential,
 			verbose=True,
 			#memory=True,
 			embedder=embedder_config,
 			knowledge=knowledge,
 			#planning=True,
 			#planning_llm=llm,
-			manager_agent=self.story_director(),
+			#manager_agent=self.story_director(),
 			function_calling_llm=function_calling_llm,
 			llm=llm
 		)
