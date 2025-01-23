@@ -19,8 +19,17 @@ class Character(BaseModel):
         return f"Name: {self.name}\nAge: {self.age}\nPersonality: {self.personality}\nAppearance: {self.appearance}\nBackstory: {self.backstory}"
 
 class StoryEvent(BaseModel):
-    description: str
+    description: str = Field(..., description="A detailed description of the event in narrative form")
     characters: list[str]
+
+class StoryEvents(BaseModel):
+    events: list[StoryEvent]
+
+class StageDraft(BaseModel):
+    chapter_title: str = Field(..., description="A suggestive title that alludes at the events that occur in this stage")
+    stage_name: str = Field(..., description="The name of the stage in the Hero's Journey framework")
+    synopsis: str = Field(..., description="A synopsis of all the events that occur in this stage")
+    stage_number: int = Field(..., description="The number of the stage in the Hero's Journey framework")
 
 class Stage(BaseModel):
     chapter_title: str = Field(..., description="A suggestive title that alludes at the events that occur in this stage")
@@ -35,6 +44,14 @@ class Stage(BaseModel):
         events = "\n".join([f"  - {event.description}" for event in self.events])
         return f"Chapter: {self.chapter_title}\nStage: {self.stage_name}\nSynopsis: {self.synopsis}\nEvents:\n{events}\n"
 
+class Inconsistency(BaseModel):
+    problem: str
+    suggestion: str
+    severity: str
+
+class ConsistencyCheck(BaseModel):
+    issues: list[Inconsistency]
+    events: list[StoryEvent]
 
 class Plot(BaseModel):
     stages: list[Stage]
