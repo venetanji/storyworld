@@ -18,6 +18,8 @@ Do not commit `.env` to git.
 
 Edit characters in `src/storyworld/characters/` as yaml files.
 
+Story stages are defined in `src/storyworld/stages.yaml`.
+
 ### Crew
 
 The crew folder is: `src/storyworld/crews/plot_development`
@@ -26,6 +28,7 @@ Main crew is defined in `plot_development.py`.
 
 Agents and Tasks are defined in `config/agents.yaml` and `config/tasks.yaml`.
 
+Python types used for structured output are defined in `src/storyworld/types.py`.
 
 ## Running the Project
 
