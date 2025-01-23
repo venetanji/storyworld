@@ -1,25 +1,24 @@
-create_character:
+stage_draft:
   description: >
-    Create a new character for the story.
-    
-    The character should be developed using the Hero's Journey framework.
-    The character should have a clear goal and motivation.
-    The character should have a backstory that fits into the world of the story.
-  expected_output: >
-    A new character with a name, description, goal, motivation, and backstory.
-  agent: creative_writer
+    Draft a short paragraph that will guide the development the events for the current
+    stage of the story: {stage}
 
+    The synopsis of the story so far is:
+
+    {synopsis}
+
+
+  expected_output: >
+    The current stage in Joseph Campbell's Hero's Journey is: {stage} 
+    Focus on what should happen in this stage of the story. If this is the first stage, you can skip the consistency checks.
+    The plan should briefely introduce the events, the characters involved, and the challenges they will face.
+  agent: creative_writer
 
 develop_character:
   description: >
     Develop a new story event for the characters timeline.
   expected_output: >
-    The story event should involve any of these characters:
-
-
-    {characters}
-
-
+    The story events should involve the main characters and challenge them in some way.
     This is a synopsis of previous events:
 
 
@@ -27,13 +26,13 @@ develop_character:
 
 
     The current stage in Joseph Campbell's Hero's Journey is: {stage} 
-    A detailed description of the new story event that evolves from the characters' choices.
+    A detailed description of the new story events that evolves from the characters' choices.
     The description should have details about location, time, and other characters involved.
   agent: creative_writer
 
 develop_environment:
   description: >
-    Develop a new story event that does not involve the characters directly.
+    Develop a new story event that does not involve the main characters directly.
   expected_output: >
     This is the synopsis of the story so far:
 
@@ -58,8 +57,7 @@ consistency_check:
 
     {synopsis}
 
-    The output should be a short concise repor on the consistency of the new story events with the previous events.
-    Mention any inconsistencies and suggest corrections if needed.
+    The output should be an event that is consistent with the established characters and world at this stage of the story.
   agent: consistency_checker
 
 stage_writeup:
@@ -67,6 +65,8 @@ stage_writeup:
     Finalize the {stage} stage of the story. Once finalized, the stage will be added to the synopsis.
     
   expected_output: >
+    A new stage of the story that is consistent with the established characters and world.
+    The events should match the current progress of the overall story (17 stages in total) so be mindful of the pacing.
     This is the synopsis of the story you must continue from:
 
     {synopsis}
