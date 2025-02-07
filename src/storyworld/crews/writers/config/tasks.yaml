@@ -1,0 +1,18 @@
+stage_writeup:
+  description: >
+    You are writing a story with outline:
+    {plot}
+
+    Write up the story chapter for these events:
+
+    {stage_events}
+
+    Save it as markdown in the folder ./stories/
+
+    Name each file with the title of the chapter.
+    
+  expected_output: >
+    A markdown file saved in the ./stories/ folder with the chapter content.
+  agent: creative_writer
+
+

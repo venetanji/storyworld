@@ -5,6 +5,9 @@ from pathlib import Path
 # import stages.yaml
 stages = yaml.safe_load((Path(__file__).parent / "stages.yaml").read_text())
 
+class Location(BaseModel):
+    name: str
+    description: str
 
 class Character(BaseModel):
     name: str
@@ -22,27 +25,29 @@ class StoryEvent(BaseModel):
     description: str = Field(..., description="A detailed description of the event in narrative form")
     characters: list[str]
 
-class StoryEvents(BaseModel):
-    events: list[StoryEvent]
-
-class StageDraft(BaseModel):
-    chapter_title: str = Field(..., description="A suggestive title that alludes at the events that occur in this stage")
-    stage_name: str = Field(..., description="The name of the stage in the Hero's Journey framework")
-    synopsis: str = Field(..., description="A synopsis of all the events that occur in this stage")
-    stage_number: int = Field(..., description="The number of the stage in the Hero's Journey framework")
 
 class Stage(BaseModel):
     chapter_title: str = Field(..., description="A suggestive title that alludes at the events that occur in this stage")
     events: list[StoryEvent]
     stage_name: str = Field(..., description="The name of the stage in the Hero's Journey framework")
     synopsis: str = Field(..., description="A synopsis of all the events that occur in this stage")
+    narrative_prose: str = Field(..., description="A narrative prose that describes the events in this stage")
     stage_number: int = Field(..., description="The number of the stage in the Hero's Journey framework")
+
+    @property
+    def summary(self):
+        return f"Chapter: {self.chapter_title}\nStage: {self.stage_name}\nNarrative Prose: {self.narrative_prose}\nEvents:\n{self.events}\n"
     
+    @property
+    def event_list(self):      
+        return "\n".join([f"  - {event.description}" for event in self.events])
+
+class PlotDraft(BaseModel):
+    stages: list[Stage]
     
     @property
     def summary(self):
-        events = "\n".join([f"  - {event.description}" for event in self.events])
-        return f"Chapter: {self.chapter_title}\nStage: {self.stage_name}\nSynopsis: {self.synopsis}\nEvents:\n{events}\n"
+        return "\n".join([stage.event_list for stage in self.stages])
 
 class Inconsistency(BaseModel):
     problem: str

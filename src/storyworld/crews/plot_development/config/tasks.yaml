@@ -1,82 +1,11 @@
-stage_draft:
+draft_plot:
   description: >
-    Draft a short paragraph that will guide the development the events for the current
-    stage of the story: {stage}
+    Draft a plot outline for the story.
+    The story should have the following characters:
 
-    The synopsis of the story so far is:
-
-    {synopsis}
-
+    {characters}
 
   expected_output: >
-    The current stage in Joseph Campbell's Hero's Journey is: {stage} 
-    Focus on what should happen in this stage of the story. If this is the first stage, you can skip the consistency checks.
-    The plan should briefely introduce the events, the characters involved, and the challenges they will face.
-  agent: creative_writer
-
-develop_character:
-  description: >
-    Develop a new story event for the characters timeline.
-  expected_output: >
-    The story events should involve the main characters and challenge them in some way.
-    This is a synopsis of previous events:
-
-
-    {synopsis}
-
-
-    The current stage in Joseph Campbell's Hero's Journey is: {stage} 
-    A detailed description of the new story events that evolves from the characters' choices.
-    The description should have details about location, time, and other characters involved.
-  agent: creative_writer
-
-develop_environment:
-  description: >
-    Develop a new story event that does not involve the main characters directly.
-  expected_output: >
-    This is the synopsis of the story so far:
-
-    {synopsis}
-
-    Use Joseph Campbell's Hero's Journey as a blueprint for the story.
-    The current stage is the Hero's Journey framework is: {stage} 
-    The event description should have details about locations and characters involved in the event.
-    Use a narrative style in your writing.
-    Events do not need to involve the characters directly.
-  agent: creative_writer
-
-
-consistency_check:
-  description: >
-    Check the consistency of new story events with previous events.
-  expected_output: >
-    The plot should follow the stages of the hero's journey and be consistent with the established characters
-    personality and past events.
-
-    This is the synopsis of the story so far:
-
-    {synopsis}
-
-    The output should be an event that is consistent with the established characters and world at this stage of the story.
-  agent: consistency_checker
-
-stage_writeup:
-  description: >
-    Finalize the {stage} stage of the story. Once finalized, the stage will be added to the synopsis.
-    
-  expected_output: >
-    A new stage of the story that is consistent with the established characters and world.
-    The events should match the current progress of the overall story (17 stages in total) so be mindful of the pacing.
-    This is the synopsis of the story you must continue from:
-
-    {synopsis}
-
-    Finalize the next stage of the story: {stage}
-    
-    Avoid any references to the Hero's Journey stages in the synopsis.
-    Do not reference the Hero's Journey in the synopsis as it might confuse the final audience.
-    A list of events that are part of the {stage} stage of the story and the names of the characters involved in the events.
-    Chapter title should not be the same as the stage title, use metaphores or allegories instead.
-    A synopsis of the events in narrative form.
-    The synopsis should hide any references to the Hero's Journey stages by using allegorical language.
+    An detailed outline of the story plot describing what characters do, their motivations
+    the specific challenges they face, the settings, the emotions, the conflicts, and the resolutions.
   agent: creative_writer
