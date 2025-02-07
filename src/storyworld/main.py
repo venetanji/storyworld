@@ -4,54 +4,64 @@ from pydantic import BaseModel
 
 from crewai.flow.flow import Flow, listen, start
 
-from storyworld.types import Character, Stage
+from storyworld.types import Character, PlotDraft
 from storyworld.crews.plot_development.plot_development import PlotDevelopment
+from storyworld.crews.writers.writers import Writers
+import os
 
 import yaml
 from pathlib import Path
-characters_path = Path(__file__).parent / "characters"
+import random
+characters_path = Path(os.getenv("STORYWORLD_PATH"))/ "characters"
 stages = yaml.safe_load((Path(__file__).parent / "stages.yaml").read_text())
 
 # load all yaml files in characters folder
 characters = []
 for file in characters_path.rglob("*.yaml"):
     with open(file) as f:
+        print("loading character", file)
         characters.append(Character(**yaml.safe_load(f)))
 
 class StoryWorldState(BaseModel):
-    characters: list[Character] = characters
-    stages: list[Stage] = []
+    characters: list[Character] = []
+    plot_draft: PlotDraft = PlotDraft(stages=[])
 
 
 class StoryFlow(Flow[StoryWorldState]):
-    initial_state = StoryWorldState()
 
     def current_summary(self):
         return "\n".join([stage.summary for stage in self.state.stages])
 
     @start()
     def start(self):
-        for index, stage_name in enumerate(stages["stages"]):
-            inputs = {
-                "characters": "\n".join([character.description for character in self.state.characters]),
-                "stage": f"{stage_name} - {index + 1} of {len(stages['stages'])}",
-                "synopsis": self.current_summary(),
-                "stages": "\n".join(stages["stages"]),
-            }
+        
+        # shuffle characters and select 10
+        self.state.characters = random.sample(characters, 5)
+        
+        inputs = {
+            "characters": "\n".join([character.description for character in self.state.characters]),
+            "stages": "\n".join(stages["stages"]),
+        }
 
-            new_stage = PlotDevelopment().crew().kickoff(inputs=inputs)
-            self.state.stages.append(new_stage.pydantic)
-            print("-------- Stage complete --------\n")
-            print("-------- Stage object ----------\n", new_stage.pydantic, "\n\n")
-            print("-------- Story summary ---------\n", self.current_summary(), "\n\n")
+        plot_draft = PlotDevelopment().crew().kickoff(inputs=inputs)
+        self.state.plot_draft = plot_draft.pydantic
 
-
-
-        print("Story complete!")
-        print("State of the world:", self.state)
-        print("\n\nStory events:")
-        print("\n".join([stage.summary for stage in self.state.stages]))
-        return self.state
+    @listen('start')
+    def develop_stages(self):
+        stages_inputs = [{
+            "characters": "\n".join([character.description for character in self.state.characters]),
+            "stages": "\n".join(stages["stages"]),
+            "stage_events": "\n".join([event.description for event in stage.events]),
+            "plot": self.state.plot_draft.summary,
+        } for stage in self.state.plot_draft.stages]
+        chapters = Writers().crew().kickoff_for_each(inputs=stages_inputs)
+        
+        for chapter in chapters:
+            # save chapter to a file in "stages" folder
+            with open(f"stages/{chapter.pydantic.chapter_title}.txt", "w") as f:
+                f.write(chapter.narrative_prose)
+        
+    
 
 def kickoff():
     story_flow = StoryFlow()
