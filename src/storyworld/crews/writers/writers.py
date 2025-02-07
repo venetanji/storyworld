@@ -3,7 +3,7 @@ from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import FileWriterTool
 from chromadb.utils.embedding_functions import OpenAIEmbeddingFunction
 import os
-
+from storyworld.types import Prose
 # If you want to run a snippet of code before or after the crew starts, 
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
@@ -47,12 +47,19 @@ class Writers():
 			config=self.agents_config['creative_writer'],
 			verbose=True
 		)
-
+	
+	@task
+	def expand_events(self) -> Task:
+		return Task(
+			config=self.tasks_config['expand_events'],
+		)
+  
 	@task
 	def stage_writeup(self) -> Task:
 		return Task(
 			config=self.tasks_config['stage_writeup'],
-			tools=[FileWriterTool()],
+			output_pydantic=Prose,
+			context=[self.expand_events()]
 		)
 
 	@crew

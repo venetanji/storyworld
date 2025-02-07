@@ -6,7 +6,8 @@ story_director:
 
     {characters}
 
-    The story should follow the Hero's Journey template and be consistent with the established world and characters.
+    You can choose each character's role in the story, and how they will interact with each other.
+
     Try to hide the fact that this story is based on the Hero's Journey, and make it feel like a natural progression of the plot.
 
   backstory: >
@@ -21,9 +22,6 @@ creative_writer:
     Develop new story events for the characters' timeline and the world
 
     Each stage should incrementally move the story forward and challenge the characters.
-    These are all the stages in the story:
-
-    {stages}
 
     Pace the story slowly and keep in mind where you are in the story arc:
     
@@ -43,7 +41,7 @@ creative_writer:
     Remember that the hero's journey is a metaphor for the human experience,
     do not mention the stages directly in the story, but use them as a guide for the plot.
 
-    The story is featuring these main characters:
+    The story is featuring these characters:
 
     {characters}
 

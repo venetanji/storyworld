@@ -11,6 +11,7 @@ import os
 
 import yaml
 from pathlib import Path
+import random
 characters_path = Path(os.getenv("STORYWORLD_PATH"))/ "characters"
 stages = yaml.safe_load((Path(__file__).parent / "stages.yaml").read_text())
 
@@ -18,10 +19,11 @@ stages = yaml.safe_load((Path(__file__).parent / "stages.yaml").read_text())
 characters = []
 for file in characters_path.rglob("*.yaml"):
     with open(file) as f:
+        print("loading character", file)
         characters.append(Character(**yaml.safe_load(f)))
 
 class StoryWorldState(BaseModel):
-    characters: list[Character] = characters
+    characters: list[Character] = []
     plot_draft: PlotDraft = PlotDraft(stages=[])
 
 
@@ -32,6 +34,10 @@ class StoryFlow(Flow[StoryWorldState]):
 
     @start()
     def start(self):
+        
+        # shuffle characters and select 10
+        self.state.characters = random.sample(characters, 5)
+        
         inputs = {
             "characters": "\n".join([character.description for character in self.state.characters]),
             "stages": "\n".join(stages["stages"]),
@@ -48,7 +54,12 @@ class StoryFlow(Flow[StoryWorldState]):
             "stage_events": "\n".join([event.description for event in stage.events]),
             "plot": self.state.plot_draft.summary,
         } for stage in self.state.plot_draft.stages]
-        Writers().crew().kickoff_for_each(inputs=stages_inputs)
+        chapters = Writers().crew().kickoff_for_each(inputs=stages_inputs)
+        
+        for chapter in chapters:
+            # save chapter to a file in "stages" folder
+            with open(f"stages/{chapter.pydantic.chapter_title}.txt", "w") as f:
+                f.write(chapter.narrative_prose)
         
     
 

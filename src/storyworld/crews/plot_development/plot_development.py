@@ -68,7 +68,6 @@ class PlotDevelopment():
 			llm=llm,
 			function_calling_llm=function_calling_llm,
 			knowledge=knowledge,
-
 		)
 
 	@agent

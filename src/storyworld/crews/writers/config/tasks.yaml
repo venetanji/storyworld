@@ -1,18 +1,27 @@
 stage_writeup:
   description: >
-    You are writing a story with outline:
+    Write a narrative prose for these events in the storyline:
+    {stage_events}
+    
+    The full plot outline is:
+
     {plot}
 
-    Write up the story chapter for these events:
-
-    {stage_events}
-
-    Save it as markdown in the folder ./stories/
-
-    Name each file with the title of the chapter.
-    
   expected_output: >
-    A markdown file saved in the ./stories/ folder with the chapter content.
+    A narrative prose for the story chapter with the outline provided in markdown format.
   agent: creative_writer
 
+expand_events:
+  description: >
+    Expand the events in the story chapter.
+    
+    {stage_events}
+
+    Add more details to the events, including character thoughts, emotions, and reactions.
+    
+  expected_output: >
+    A detailed description of how the story presents the events in this story chapter.
+    It should include details about backstory, character motivations, and the consequences of the events.
+
+  agent: creative_writer
 

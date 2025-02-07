@@ -19,7 +19,7 @@ class Character(BaseModel):
     # set description to be all the character's attributes
     @property
     def description(self):
-        return f"Name: {self.name}\nAge: {self.age}\nPersonality: {self.personality}\nAppearance: {self.appearance}\nBackstory: {self.backstory}"
+        return f"Name: {self.name}\nAge: {self.age}\nPersonality: {self.personality.strip()}\nAppearance: {self.appearance.strip()}\nBackstory: {self.backstory.strip()}\n"
 
 class StoryEvent(BaseModel):
     description: str = Field(..., description="A detailed description of the event in narrative form")
@@ -31,7 +31,7 @@ class Stage(BaseModel):
     events: list[StoryEvent]
     stage_name: str = Field(..., description="The name of the stage in the Hero's Journey framework")
     synopsis: str = Field(..., description="A synopsis of all the events that occur in this stage")
-    narrative_prose: str = Field(..., description="A narrative prose that describes the events in this stage")
+    narrative_prose: str = Field(..., description="The narrative prose for this stage. Minimum 1000 words.")
     stage_number: int = Field(..., description="The number of the stage in the Hero's Journey framework")
 
     @property
@@ -49,6 +49,12 @@ class PlotDraft(BaseModel):
     def summary(self):
         return "\n".join([stage.event_list for stage in self.stages])
 
+class Prose(BaseModel):
+    characters: list[str] = Field(..., description="A list of characters in the scene")
+    chapter_title: str = Field(..., description="The title of the chapter")
+    prose_markdown: str = Field(..., description="The prose in markdown format. Minimum 1000 words.")
+    
+    
 class Inconsistency(BaseModel):
     problem: str
     suggestion: str

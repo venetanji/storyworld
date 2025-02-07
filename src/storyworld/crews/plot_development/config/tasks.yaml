@@ -6,6 +6,6 @@ draft_plot:
     {characters}
 
   expected_output: >
-    An detailed outline of the story plot describing what characters do, their motivations
+    A detailed outline of the story plot describing what characters do, their motivations
     the specific challenges they face, the settings, the emotions, the conflicts, and the resolutions.
   agent: creative_writer
