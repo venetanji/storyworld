@@ -25,45 +25,32 @@ class StoryEvent(BaseModel):
     description: str = Field(..., description="A detailed description of the event in narrative form")
     characters: list[str]
 
-
-class Stage(BaseModel):
-    chapter_title: str = Field(..., description="A suggestive title that alludes at the events that occur in this stage")
+class Chapter(BaseModel):
+    title: str = Field(..., description="A title that alludes at the events that occur in this stage")
     events: list[StoryEvent]
-    stage_name: str = Field(..., description="The name of the stage in the Hero's Journey framework")
-    synopsis: str = Field(..., description="A synopsis of all the events that occur in this stage")
-    narrative_prose: str = Field(..., description="The narrative prose for this stage. Minimum 1000 words.")
-    stage_number: int = Field(..., description="The number of the stage in the Hero's Journey framework")
+    synopsis: str = Field(..., description="A synopsis of all the events that occur in this stage. 500 words minimum")
 
     @property
     def summary(self):
-        return f"Chapter: {self.chapter_title}\nStage: {self.stage_name}\nNarrative Prose: {self.narrative_prose}\nEvents:\n{self.events}\n"
+        return f"Chapter: {self.chapter_title}\nSynopsis: {self.synopsis}\nEvents:\n{self.event_list}\n"
     
     @property
     def event_list(self):      
         return "\n".join([f"  - {event.description}" for event in self.events])
 
 class PlotDraft(BaseModel):
-    stages: list[Stage]
+    chapters: list[Chapter]
     
     @property
     def summary(self):
-        return "\n".join([stage.event_list for stage in self.stages])
+        return "\n".join([chapter.event_list for chapter in self.chapters])
+
+class PlotCharacter(BaseModel):
+    name: str
+    role: str
+    description: str
 
 class Prose(BaseModel):
-    characters: list[str] = Field(..., description="A list of characters in the scene")
+    characters: list[PlotCharacter] = Field(..., description="A list of characters in the scene")
     chapter_title: str = Field(..., description="The title of the chapter")
     prose_markdown: str = Field(..., description="The prose in markdown format. Minimum 1000 words.")
-    
-    
-class Inconsistency(BaseModel):
-    problem: str
-    suggestion: str
-    severity: str
-
-class ConsistencyCheck(BaseModel):
-    issues: list[Inconsistency]
-    events: list[StoryEvent]
-
-class Plot(BaseModel):
-    stages: list[Stage]
-    characters: list[Character]

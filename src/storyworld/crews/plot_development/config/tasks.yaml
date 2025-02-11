@@ -5,7 +5,12 @@ draft_plot:
 
     {characters}
 
+    You should identify each character's role and archetype and keep it consistent throughout the story.
+
+    The plot should loosely follow the Hero's Journey structure, but do not mention the stages directly in the story.
+
   expected_output: >
     A detailed outline of the story plot describing what characters do, their motivations
     the specific challenges they face, the settings, the emotions, the conflicts, and the resolutions.
+    Each character should have a clear arc and the story should move forward in a meaningful way.
   agent: creative_writer

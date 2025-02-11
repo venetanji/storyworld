@@ -24,19 +24,18 @@ for file in characters_path.rglob("*.yaml"):
 
 class StoryWorldState(BaseModel):
     characters: list[Character] = []
-    plot_draft: PlotDraft = PlotDraft(stages=[])
+    plot_draft: PlotDraft = PlotDraft(chapters=[])
 
 
 class StoryFlow(Flow[StoryWorldState]):
 
-    def current_summary(self):
-        return "\n".join([stage.summary for stage in self.state.stages])
+
 
     @start()
     def start(self):
         
         # shuffle characters and select 10
-        self.state.characters = random.sample(characters, 5)
+        self.state.characters = random.sample(characters, 2)
         
         inputs = {
             "characters": "\n".join([character.description for character in self.state.characters]),
@@ -51,18 +50,16 @@ class StoryFlow(Flow[StoryWorldState]):
         stages_inputs = [{
             "characters": "\n".join([character.description for character in self.state.characters]),
             "stages": "\n".join(stages["stages"]),
-            "stage_events": "\n".join([event.description for event in stage.events]),
+            "stage_events": "\n".join([event.description for event in chapter.events]),
             "plot": self.state.plot_draft.summary,
-        } for stage in self.state.plot_draft.stages]
+        } for chapter in self.state.plot_draft.chapters]
         chapters = Writers().crew().kickoff_for_each(inputs=stages_inputs)
         
         for chapter in chapters:
             # save chapter to a file in "stages" folder
-            with open(f"stages/{chapter.pydantic.chapter_title}.txt", "w") as f:
-                f.write(chapter.narrative_prose)
+            with open(f"stages/{chapter.pydantic.chapter_title}.md", "w", encoding='utf8')  as f:
+                f.write(chapter.pydantic.prose_markdown)
         
-    
-
 def kickoff():
     story_flow = StoryFlow()
     story_flow.kickoff()
