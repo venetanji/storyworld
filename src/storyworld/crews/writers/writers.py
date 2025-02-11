@@ -9,25 +9,13 @@ from storyworld.types import Prose
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
 
-embedder_config = {
+embedder = {
 	"provider": OpenAIEmbeddingFunction(
 		model_name=os.getenv("EMBEDDER_MODEL", "mxbai-embed-large"),
 		api_base=os.getenv("EMBEDDER_API_BASE", "http://localhost:11434/v1"),
-		api_key="secret",
+		api_key=os.getenv("EMBEDDER_API_KEY", "secret"),
 	)
 }
-
-llm  = LLM(
-	model=os.getenv("MODEL"),
-	temperature=0.5,
-	presence_penalty=0.3,
-)
-
-function_calling_llm  = LLM(
-	model=os.getenv("MODEL"),
-	temperature=0.1,
-)
-
 
 @CrewBase
 class Writers():
@@ -72,6 +60,8 @@ class Writers():
 			agents=self.agents, # Automatically created by the @agent decorator
 			tasks=self.tasks, # Automatically created by the @task decorator
 			process=Process.sequential,
+			embedder=embedder,
+			memory=True,
 			verbose=True,
 			# process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
 		)

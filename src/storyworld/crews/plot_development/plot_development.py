@@ -1,6 +1,6 @@
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task, before_kickoff
-from storyworld.types import PlotDraft, Stage
+from storyworld.types import PlotDraft
 from crewai.knowledge.knowledge import Knowledge
 from crewai.knowledge.source.crew_docling_source import CrewDoclingSource
 from chromadb.utils.embedding_functions import OpenAIEmbeddingFunction
@@ -15,32 +15,20 @@ embedder = {
 	)
 }
 
-llm  = LLM(
-	model=os.getenv("MODEL"),
-	temperature=0.5,
-	presence_penalty=0.3,
-)
+# storytelling_knowledge_source = CrewDoclingSource(
+#     file_paths=[
+#         "https://en.wikipedia.org/wiki/Hero%27s_journey",
+# 		"https://mythcreants.com/blog/the-eight-character-archetypes-of-the-heros-journey/",
+# 		"https://tvtropes.org/pmwiki/pmwiki.php/Main/TheHerosJourney",
+# 		"https://en.wikipedia.org/wiki/Worldbuilding",
+#     ],
+# )
 
-function_calling_llm  = LLM(
-	model=os.getenv("MODEL"),
-	temperature=0.1,
-)
-
-
-storytelling_knowledge_source = CrewDoclingSource(
-    file_paths=[
-        "https://en.wikipedia.org/wiki/Hero%27s_journey",
-		"https://mythcreants.com/blog/the-eight-character-archetypes-of-the-heros-journey/",
-		"https://tvtropes.org/pmwiki/pmwiki.php/Main/TheHerosJourney",
-		"https://en.wikipedia.org/wiki/Worldbuilding",
-    ],
-)
-
-knowledge = Knowledge(
-    sources=[storytelling_knowledge_source],
-	embedder=embedder,
-	collection_name="storytelling"
-)
+# knowledge = Knowledge(
+#     sources=[storytelling_knowledge_source],
+# 	embedder=embedder,
+# 	collection_name="storytelling"
+# )
 
 @CrewBase
 class PlotDevelopment():
@@ -54,9 +42,7 @@ class PlotDevelopment():
 		return Agent(
 			config=self.agents_config['story_director'],
 			verbose=True,
-			knowledge=knowledge,
-			llm=llm,
-			function_calling_llm=function_calling_llm,
+			#knowledge=knowledge,
 			allow_delegation=True,
 		)
 
@@ -65,9 +51,7 @@ class PlotDevelopment():
 		return Agent(
 			config=self.agents_config['creative_writer'],
 			verbose=True,
-			llm=llm,
-			function_calling_llm=function_calling_llm,
-			knowledge=knowledge,
+			#knowledge=knowledge,
 		)
 
 	@agent
@@ -75,9 +59,7 @@ class PlotDevelopment():
 		return Agent(
 			config=self.agents_config['consistency_checker'],
 			verbose=True,
-			llm=llm,
-			function_calling_llm=function_calling_llm,
-			knowledge=knowledge,
+			#knowledge=knowledge,
 		)
 	
 	@task
@@ -85,6 +67,7 @@ class PlotDevelopment():
 		return Task(
 			config=self.tasks_config['draft_plot'],
 			output_pydantic=PlotDraft,
+			#human_input=True,
 		)
 
 	@crew
@@ -100,10 +83,8 @@ class PlotDevelopment():
 			verbose=True,
 			memory=False,
 			embedder=embedder,
-			knowledge=knowledge,
+			#knowledge=knowledge,
 			#planning=True,
 			#planning_llm=llm,
 			manager_agent=self.story_director(),
-			function_calling_llm=function_calling_llm,
-			llm=llm
 		)
