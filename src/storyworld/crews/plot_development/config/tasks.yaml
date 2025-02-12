@@ -1,15 +1,19 @@
 draft_plot:
   description: >
-    Draft a plot outline for the story.
+    Create a complete plot outline for a story.
     The story should have the following characters:
+
 
     {characters}
 
-    You should identify each character's role and archetype and keep it consistent throughout the story.
 
-    The plot should loosely follow the Hero's Journey structure, but do not mention the stages directly in the story.
+    Each character's role and archetype needs to be defined kept consistent throughout the story.
+
+    The plot should loosely follow the Hero's Journey structure, but not mention the stages directly in the story.
 
   expected_output: >
+    Delegate to the creative writer the task of developing new story events for the characters' timeline and the world.
+    Check the consistency checker's work to ensure that the plot developments are consistent with the established characters and world.
     A detailed outline of the story plot describing what characters do, their motivations
     the specific challenges they face, the settings, the emotions, the conflicts, and the resolutions.
     Each character should have a clear arc and the story should move forward in a meaningful way.

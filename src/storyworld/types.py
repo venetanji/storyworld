@@ -53,4 +53,4 @@ class PlotCharacter(BaseModel):
 class Prose(BaseModel):
     characters: list[PlotCharacter] = Field(..., description="A list of characters in the scene")
     chapter_title: str = Field(..., description="The title of the chapter")
-    prose_markdown: str = Field(..., description="The prose in markdown format. Minimum 1000 words.")
+    prose: str = Field(..., description="The prose in markdown format. Minimum 1000 words.")

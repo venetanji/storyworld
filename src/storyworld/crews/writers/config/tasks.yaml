@@ -16,13 +16,13 @@ stage_writeup:
 
 expand_events:
   description: >
-    Expand the events in the story chapter.
+    Expand these events in this story chapter:
 
     
     {stage_events}
 
 
-    Add more details to the events, including character thoughts, emotions, and reactions.
+    Add more details to the scenes, including character thoughts, emotions, and reactions.
     
   expected_output: >
     A detailed description of how the story presents the events in this story chapter.

@@ -2,14 +2,15 @@ story_director:
   role: >
     Story Director
   goal: >
-    Create a coherent and engaging plot based on these characters:
+    Coordinate the team to create a coherent and engaging plot based on these characters:
+
 
     {characters}
 
-    You can choose each character's role in the story, and how they will interact with each other.
 
-    Try to hide the fact that this story is based on the Hero's Journey, and make it feel like a natural progression of the plot.
-
+    Let the creative writer choose each character's role in the story, and how they will interact with each other.
+    Check the consistency checker's work to ensure that the plot developments are consistent with the established characters and world.
+    
   backstory: >
     You are the director of the story development team. You are responsible for overseeing the progress
     of the plot and ensuring that it is consistent and engaging. You
@@ -42,6 +43,7 @@ creative_writer:
     do not mention the stages directly in the story, but use them as a guide for the plot.
 
     The story is featuring these characters:
+    
 
     {characters}
 

@@ -46,7 +46,12 @@ class StoryFlow(Flow[StoryWorldState]):
         self.state.plot_draft = plot_draft.pydantic
 
     @listen('start')
-    def develop_stages(self):
+    def write_chapters(self):
+        print(f"Developing { len(self.state.plot_draft.chapters) } chapters")
+        print("Chapter titles:\n")
+        for chapter in self.state.plot_draft.chapters:
+            print("  - ", chapter.title)
+        
         stages_inputs = [{
             "characters": "\n".join([character.description for character in self.state.characters]),
             "stages": "\n".join(stages["stages"]),
@@ -54,11 +59,10 @@ class StoryFlow(Flow[StoryWorldState]):
             "plot": self.state.plot_draft.summary,
         } for chapter in self.state.plot_draft.chapters]
         chapters = Writers().crew().kickoff_for_each(inputs=stages_inputs)
-        
         for chapter in chapters:
             # save chapter to a file in "stages" folder
             with open(f"stages/{chapter.pydantic.chapter_title}.md", "w", encoding='utf8')  as f:
-                f.write(chapter.pydantic.prose_markdown)
+                f.write(chapter.pydantic.prose)
         
 def kickoff():
     story_flow = StoryFlow()
